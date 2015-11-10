@@ -11,8 +11,8 @@
 
 @interface BarCodeViewController : UIViewController
 
-@property (nonatomic, copy) void (^BarCodeCancleBlock) (BarCodeViewController *);//Cancel Scan
-@property (nonatomic, copy) void (^BarCodeSuncessBlock) (BarCodeViewController *,NSString *);//Scan result
-@property (nonatomic, copy) void (^BarCodeFailBlock) (BarCodeViewController *);//Scan Fail
+@property (nonatomic, copy) void (^BarCodeCancleBlock) (BarCodeViewController *);                   //Cancel Scan
+@property (nonatomic, copy) void (^BarCodeSuncessBlock) (BarCodeViewController *,NSString *);       //Scan result
+@property (nonatomic, copy) void (^BarCodeFailBlock) (BarCodeViewController *);                     //Scan Fail
 
 @end

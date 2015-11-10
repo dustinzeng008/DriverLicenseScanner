@@ -20,7 +20,7 @@ static const float kLineMaxY = 350;
 static const float kReaderViewWidth = 260;
 static const float kReaderViewHeight = 100;
 
-@interface BarCodeViewController ()<AVCaptureMetadataOutputObjectsDelegate>
+@interface BarCodeViewController () <AVCaptureMetadataOutputObjectsDelegate>
 
 @property (nonatomic, strong) AVCaptureSession *captureSession;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *videoPreviewLayer;
@@ -45,8 +45,7 @@ static const float kReaderViewHeight = 100;
 
 
 // ********************************** Initialize navigation bar **********************************
-- (void)initNavigationBar
-{
+- (void)initNavigationBar{
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0,0,kDeviceWidth, 64)];
     bgView.backgroundColor = [UIColor turquoiseColor];
     [self.view addSubview:bgView];
@@ -61,7 +60,6 @@ static const float kReaderViewHeight = 100;
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:titleLabel];
     
-    
     // set navigation bar Button
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(10, 16, 100, 44)];
     button.tintColor = [UIColor whiteColor];
@@ -73,20 +71,14 @@ static const float kReaderViewHeight = 100;
 }
 
 
-- (void)initUI
-{
+- (void)initUI{
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    //device.focusMode =  AVCaptureFocusModeAutoFocus;
     
     //Check Camera
     NSError *error = nil;
-    
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
-    
-    if (error)
-    {
+    if (error){
         NSLog(@"No Camera-%@", error.localizedDescription);
-        
         return;
     }
     
@@ -144,16 +136,14 @@ static const float kReaderViewHeight = 100;
     self.captureSession = session;
 }
 
-- (CGRect)getReaderViewBoundsWithSize:(CGSize)asize
-{
+- (CGRect)getReaderViewBoundsWithSize:(CGSize)asize{
     return CGRectMake(kLineMinY / KDeviceHeight, ((kDeviceWidth - asize.width) / 2.0) / kDeviceWidth, asize.height / KDeviceHeight, asize.width / kDeviceWidth);
 }
 
-- (void)setOverlayPickerView
-{
+- (void)setOverlayPickerView{
     //draw the line in the middle
     _line = [[UIImageView alloc] initWithFrame:CGRectMake((kDeviceWidth - 300) / 2.0, kLineMinY, 300, 12 * 300 / 320.0)];
-    [_line setImage:[UIImage imageNamed:@"QRCodeLine"]];
+    [_line setImage:[UIImage imageNamed:@"BarCodeLine"]];
     [self.view addSubview:_line];
     
     //upper view
@@ -183,28 +173,28 @@ static const float kReaderViewHeight = 100;
     [self.view addSubview:downView];
     
     //four corner
-    UIImage *cornerImage = [UIImage imageNamed:@"QRCodeTopLeft"];
+    UIImage *cornerImage = [UIImage imageNamed:@"BarCodeTopLeft"];
     
     //left view
     UIImageView *leftView_image = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(leftView.frame) - cornerImage.size.width / 2.0, CGRectGetMaxY(upView.frame) - cornerImage.size.height / 2.0, cornerImage.size.width, cornerImage.size.height)];
     leftView_image.image = cornerImage;
     [self.view addSubview:leftView_image];
     
-    cornerImage = [UIImage imageNamed:@"QRCodeTopRight"];
+    cornerImage = [UIImage imageNamed:@"BarCodeTopRight"];
     
     //right view
     UIImageView *rightView_image = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMinX(rightView.frame) - cornerImage.size.width / 2.0, CGRectGetMaxY(upView.frame) - cornerImage.size.height / 2.0, cornerImage.size.width, cornerImage.size.height)];
     rightView_image.image = cornerImage;
     [self.view addSubview:rightView_image];
     
-    cornerImage = [UIImage imageNamed:@"QRCodebottomLeft"];
+    cornerImage = [UIImage imageNamed:@"BarCodebottomLeft"];
     
     //bottom view
     UIImageView *downView_image = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(leftView.frame) - cornerImage.size.width / 2.0, CGRectGetMinY(downView.frame) - cornerImage.size.height / 2.0, cornerImage.size.width, cornerImage.size.height)];
     downView_image.image = cornerImage;
     [self.view addSubview:downView_image];
     
-    cornerImage = [UIImage imageNamed:@"QRCodebottomRight"];
+    cornerImage = [UIImage imageNamed:@"BarCodebottomRight"];
     
     UIImageView *downViewRight_image = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMinX(rightView.frame) - cornerImage.size.width / 2.0, CGRectGetMinY(downView.frame) - cornerImage.size.height / 2.0, cornerImage.size.width, cornerImage.size.height)];
     downViewRight_image.image = cornerImage;
@@ -236,22 +226,18 @@ static const float kReaderViewHeight = 100;
     NSString *detectionString = nil;
     NSArray *barCodeTypes = @[AVMetadataObjectTypePDF417Code];
     
-    
     for (AVMetadataObject *metadata in metadataObjects) {
         for (NSString *type in barCodeTypes) {
-            if ([metadata.type isEqualToString:type])
-            {
+            if ([metadata.type isEqualToString:type]){
                 detectionString = [(AVMetadataMachineReadableCodeObject *)metadata stringValue];
                 break;
             }
         }
-        if (detectionString != nil)
-        {
+        if (detectionString != nil){
             if (self.BarCodeSuncessBlock) {
                 self.BarCodeSuncessBlock(self,detectionString);
             }
-            else
-            {
+            else{
                 if (self.BarCodeFailBlock) {
                     self.BarCodeFailBlock(self);
                 }
@@ -264,16 +250,13 @@ static const float kReaderViewHeight = 100;
                 self.BarCodeFailBlock(self);
             }
         }
-        //NSLog(@"end");
     }
     
 }
 
 
 #pragma mark -
-
-- (void)startBarCodeReading
-{
+- (void)startBarCodeReading{
     _lineTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 20 target:self selector:@selector(animationLine) userInfo:nil repeats:YES];
     
     [self.captureSession startRunning];
@@ -281,8 +264,7 @@ static const float kReaderViewHeight = 100;
     NSLog(@"start reading");
 }
 
-- (void)stopBarCodeReading
-{
+- (void)stopBarCodeReading{
     if (_lineTimer)
     {
         [_lineTimer invalidate];
@@ -295,8 +277,7 @@ static const float kReaderViewHeight = 100;
 }
 
 //Cancel Scanning
-- (void)cancleBarCodeReading
-{
+- (void)cancleBarCodeReading{
     [self stopBarCodeReading];
     
     if (self.BarCodeCancleBlock)
@@ -310,8 +291,7 @@ static const float kReaderViewHeight = 100;
 #pragma mark -
 #pragma mark scanning line
 
-- (void)animationLine
-{
+- (void)animationLine{
     __block CGRect frame = _line.frame;
     
     static BOOL flag = YES;
@@ -354,8 +334,6 @@ static const float kReaderViewHeight = 100;
             flag = !flag;
         }
     }
-    
-    //NSLog(@"_line.frame.origin.y==%f",_line.frame.origin.y);
 }
 
 

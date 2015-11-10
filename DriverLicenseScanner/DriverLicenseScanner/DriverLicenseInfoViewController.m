@@ -96,6 +96,7 @@
             textFieldY += 20;
         }
         FUITextField *textField = [self getTextField:textFieldY componentText:textFieldContentArray[i]];
+        // if the textfield is gender textfield or birthday textfield add touch down function to it.
         if (i == 3) {
             [textField addTarget:self action:@selector(selectGender:) forControlEvents:UIControlEventTouchDown];
         }else if (i == 4){
@@ -103,7 +104,6 @@
         }
         [textFieldMArray addObject:textField];
     }
-    
 }
 
 // ********************************** Function to create textfield **********************************
